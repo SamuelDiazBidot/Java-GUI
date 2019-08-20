@@ -13,6 +13,10 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.events.MouseListener;
+
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class Main {
 
@@ -55,14 +59,19 @@ public class Main {
 		shlTarea.setText("Tarea#1");
 		shlTarea.setLayout(null);
 		
-		Position pos = new Position(10, 10);
+		int[] pos = new int[] {10, 10};
+		ArrayList<Rectangle> recs = new ArrayList<Rectangle>();
+		recs.add(new Rectangle(pos[0], pos[1], 10, 10));
 		
 		Canvas canvas = new Canvas(shlTarea, SWT.NONE);
 		canvas.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		canvas.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
-				e.gc.drawRectangle(pos.getX(), pos.getY(), 10, 10);
+				e.gc.setBackground(e.display.getSystemColor(SWT.COLOR_BLACK));
+				for(Rectangle rect : recs) {
+					e.gc.fillRectangle(rect);
+				}
 				e.gc.dispose();
 				
 			}
@@ -79,7 +88,8 @@ public class Main {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				lblDirection.setText("Up");
-				pos.move(0, -5);
+				pos[1] += -10;
+				recs.add(new Rectangle(pos[0], pos[1], 10, 10));
 				canvas.redraw();
 			}
 		});
@@ -91,7 +101,8 @@ public class Main {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				lblDirection.setText("Left");
-				pos.move(-5, 0);
+				pos[0] += -10;
+				recs.add(new Rectangle(pos[0], pos[1], 10, 10));
 				canvas.redraw();
 			}
 		});
@@ -102,7 +113,8 @@ public class Main {
 		btnRight.addMouseListener(new MouseAdapter() { 
 			@Override public void mouseDown(MouseEvent e) {
 				lblDirection.setText("Right"); 
-					pos.move(5, 0); 
+					pos[0] += 10;
+					recs.add(new Rectangle(pos[0], pos[1], 10, 10));
 					canvas.redraw();
 			}
 		});
@@ -111,37 +123,17 @@ public class Main {
 		
 		Button btnDown = new Button(shlTarea, SWT.NONE);
 		btnDown.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseDown(MouseEvent e) {
 				lblDirection.setText("Down");
-				pos.move(0, 5);
+				pos[1] += 10;
+				recs.add(new Rectangle(pos[0], pos[1], 10, 10));
 				canvas.redraw();
 			}
 		});
 		btnDown.setBounds(196, 226, 40, 25);
 		btnDown.setText("Down");
 	}
-	
-	private class Position {
-		private int x;
-		private int y;
-		
-		public Position(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-		
-		public int getX() {
-			return x;
-		}
-		
-		public int getY() {
-			return y;
-		}
-		
-		public void move(int x, int y) {
-			this.x += x;
-			this.y += y;
-		}
-	}
 }
+	
