@@ -59,7 +59,7 @@ public class Main {
 		shlTarea.setText("Tarea#1");
 		shlTarea.setLayout(null);
 		
-		int[] pos = new int[] {10, 10};
+		int[] pos = new int[] {207, 79};
 		ArrayList<Rectangle> recs = new ArrayList<Rectangle>();
 		recs.add(new Rectangle(pos[0], pos[1], 10, 10));
 		
@@ -77,6 +77,8 @@ public class Main {
 			}
 		});
 		canvas.setBounds(10, 10, 414, 158);
+		
+		canvas.getBounds();
 		
 		Label lblDirection = new Label(shlTarea, SWT.NONE);
 		lblDirection.setAlignment(SWT.CENTER);
@@ -134,6 +136,17 @@ public class Main {
 		});
 		btnDown.setBounds(196, 226, 40, 25);
 		btnDown.setText("Down");
+		
+		Button clrBtn = new Button(shlTarea, SWT.NONE);
+		clrBtn.addMouseListener(new MouseAdapter() {
+			@Override public void mouseDown(MouseEvent e) {
+				lblDirection.setText("Clear");
+				recs.clear();
+				canvas.redraw();
+			}
+		});
+		clrBtn.setBounds(342, 200, 40, 25);
+		clrBtn.setText("Clear");
 	}
 }
 	
